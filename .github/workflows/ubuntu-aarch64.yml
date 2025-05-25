@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build_job:
@@ -53,7 +53,7 @@ jobs:
             case "${{ matrix.distro }}" in
               ubuntu*|jessie|stretch|buster|bullseye|bookworm)
                 apt-get update -q -y
-                apt-get install -q -y cmake libfmt-dev catch2
+                apt-get install -q -y cmake libfmt-dev catch2 ninja-build
                 ;;
               fedora*)
                 dnf -y update
@@ -68,7 +68,7 @@ jobs:
           # Produce a binary artifact and place it in the mounted volume
           run: |
             echo "Produced artifact at /artifacts/${artifact_name}"
-            cmake --preset=github-workflow-vcpkg -DCMAKE_CXX_COMPILER=${{matrix.CXX}} -B ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
+            cmake --DCMAKE_CXX_COMPILER=${{matrix.CXX}} -B ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
             cmake --build ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} --config ${{matrix.BUILD_TYPE}}
             cd ${{github.workspace}}/build-${{matrix.BUILD_TYPE}}
             ctest -C ${{matrix.BUILD_TYPE}}
