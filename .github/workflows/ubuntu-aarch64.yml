@@ -68,8 +68,8 @@ jobs:
           # Produce a binary artifact and place it in the mounted volume
           run: |
             echo "Produced artifact at /artifacts/${artifact_name}"
-            cmake --DCMAKE_CXX_COMPILER=${{matrix.CXX}} -B ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
-            cmake --build ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} --config ${{matrix.BUILD_TYPE}}
+            cmake -GNinja -DCMAKE_CXX_COMPILER=${{matrix.CXX}} -B ${{github.workspace}}/build-${{matrix.BUILD_TYPE}} -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
+            cmake --build ${{github.workspace}}/build-${{matrix.BUILD_TYPE}}
             cd ${{github.workspace}}/build-${{matrix.BUILD_TYPE}}
             ctest -C ${{matrix.BUILD_TYPE}}
 
